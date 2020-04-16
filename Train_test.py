@@ -55,15 +55,19 @@ def train (model, optimizer, train_loader, test_loader, test_dataset, NUM_EPOCHS
 def test(test_loader,test_dataset, model):
 
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-    
     test_error_count = 0.0
+    
     for images, labels in iter(test_loader):
         images = images.to(device)
         labels = labels.to(device)
         outputs = model(images)
-        test_error_count += float(torch.sum(torch.abs(labels - outputs.argmax(1))))
-    
-    test_accuracy = 1.0 - float(test_error_count) / float(len(test_dataset))
-    print('___________test_acc %f' % (test_accuracy))
+        _, preds = torch.max(outputs, 1)
+        test_error_count += torch.sum(preds == labels.data)    
 
-    return test_accuracy
+    print(test_error_count, len(test_ds))
+
+    epoch_acc =  test_error_count.double() / len(test_ds)
+
+    print('_______Test_acc %f' % (epoch_acc))
+        
+    return epoch_acc
