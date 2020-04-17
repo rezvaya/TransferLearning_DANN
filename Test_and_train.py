@@ -55,19 +55,13 @@ def train (model, optimizer, train_loader, test_loader, test_dataset, NUM_EPOCHS
             best_accuracy = test_accuracy
 
     return model
-import torch
-import torch.nn as nn
-import torch.optim as optim
-import torch.nn.functional as F
-
-import torchvision
-from torchvision import datasets, models, transforms          
+      
         
 def test(test_loader,test_dataset, model):
 
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
-    test_error_count = 0.0
+    test_correct_count = 0.0
     
     for images, labels in test_loader:
         images = images.to(device)
