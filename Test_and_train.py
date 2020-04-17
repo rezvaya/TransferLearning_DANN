@@ -60,7 +60,9 @@ def train (model, optimizer, train_loader, test_loader, test_dataset, NUM_EPOCHS
 def test(test_loader,test_dataset, model):
 
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-
+    
+    model.eval()
+    
     test_correct_count = 0.0
     
     for images, labels in test_loader:
