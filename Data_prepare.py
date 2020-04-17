@@ -69,7 +69,7 @@ class AllCropsDataset(Dataset):
         return img, target
 
 
-def prepare_datasets():
+def prepare_datasets(DATA_PATH):
     train_ds = AllCropsDataset(
         DATA_PATH, 
         subset='train',
