@@ -6,10 +6,18 @@ import torch.nn.functional as F
 import torchvision
 from torchvision import datasets, models, transforms
 
+import torch
+import torch.nn as nn
+import torch.optim as optim
+import torch.nn.functional as F
+
+import torchvision
+from torchvision import datasets, models, transforms
+
 def train (model, optimizer, train_loader, test_loader, test_dataset, NUM_EPOCHS, BEST_MODEL_PATH):
 
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-
+    model=model
     best_accuracy = 0.0
 
     for epoch in range(NUM_EPOCHS):
@@ -38,10 +46,10 @@ def train (model, optimizer, train_loader, test_loader, test_dataset, NUM_EPOCHS
             epoch_loss = running_loss / float(len(train_ds))
             epoch_acc = running_corrects.double() / len(train_ds)
             
-            print('iter {}/{}:'.format(i, len(iter(train_loader))))
+           
             i+= 1
 
-        print('Loss: {:.4f} train_acc: {:.4f}'.format(epoch_loss, epoch_acc))
+        print('____________Loss: {:.4f} train_acc: {:.4f}'.format(epoch_loss, epoch_acc))
         
         test_accuracy=test(test_loader, test_ds, model)
         
@@ -52,22 +60,21 @@ def train (model, optimizer, train_loader, test_loader, test_dataset, NUM_EPOCHS
     return model
 
     
+          
+        
 def test(test_loader,test_dataset, model):
 
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+
     test_error_count = 0.0
-    
     for images, labels in iter(test_loader):
         images = images.to(device)
         labels = labels.to(device)
         outputs = model(images)
-        _, preds = torch.max(outputs, 1)
-        test_error_count += torch.sum(preds == labels.data)    
+        test_error_count += float(torch.sum(torch.abs(labels - outputs.argmax(1))))
+    
+    test_accuracy = 1.0 - (float(test_error_count) / float(len(test_ds)))
+    print('_______Test_acc %f' % (test_accuracy))
 
-    print(test_error_count, len(test_ds))
-
-    epoch_acc =  test_error_count.double() / len(test_ds)
-
-    print('_______Test_acc %f' % (epoch_acc))
         
-    return epoch_acc
+    return test_accuracy
