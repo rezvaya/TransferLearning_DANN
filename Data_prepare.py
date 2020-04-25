@@ -7,7 +7,7 @@ from torchvision.datasets import ImageFolder
 
 
 class AllCropsDataset(Dataset):
-    def __init__(self, image_folder, subset='', transform=None, target_transform=None):
+    def __init__(self, image_folder, subset = '', transform = None, target_transform = None):
         self.transform = transform
         self.target_transform = target_transform
         # data subset (train, test)

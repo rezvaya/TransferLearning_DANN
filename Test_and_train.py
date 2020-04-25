@@ -6,16 +6,16 @@ import torch.nn.functional as F
 import torchvision
 from torchvision import datasets, models, transforms
 
-def train (model, optimizer, train_loader, test_loader,train_ds, test_dataset, NUM_EPOCHS, BEST_MODEL_PATH):
+def train (model, optimizer, train_loader, test_loader,train_ds, test_dataset, num_epochs, best_model_path):
         
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-    model=model
+    model = model
     model.train()
     best_accuracy = 0.0
 
-    for epoch in range(NUM_EPOCHS):
+    for epoch in range(num_epochs):
         
-        print('Epoch {}/{}'.format(epoch, NUM_EPOCHS - 1))
+        print('Epoch {}/{}'.format(epoch, num_epochs - 1))
         print('-' * 10)
 
         running_loss = 0.0
@@ -46,7 +46,7 @@ def train (model, optimizer, train_loader, test_loader,train_ds, test_dataset, N
         test_accuracy=test(test_loader, test_dataset, model)
         
         if test_accuracy > best_accuracy:
-            torch.save(model.state_dict(), BEST_MODEL_PATH)
+            torch.save(model.state_dict(), best_model_path)
             best_accuracy = test_accuracy
 
     return model
